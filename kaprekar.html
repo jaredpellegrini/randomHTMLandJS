@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Kaprekar's Constant</title>
+</head>
+<body>
+<h1>Kaprekar's Constant</h1>
+<p>Enter a 4-digit number, and within 8 iterations, this function will always result in <a href="https://en.wikipedia.org/wiki/6174_(number)" target="_blank"><b>6174</b></a>.</p>
+<p>Since the digits are resorted, there's really only a small set different possible results.<br />
+There are only 705 distinct combinations of 4-digit numbers ABCD such that A>=B and B>=C and C>=D and not (A=B and B=C and C=D).</p>
+<p>
+<input id="tbxInput" type="textbox" maxLength="4" style="width:50px;" />
+<input type="button" value="Go" onClick="kaprekar();" /><br />
+</p>
+<span id="spnOutput" />
+<script language="javascript">
+function kaprekar() {
+	let spnOutput = document.getElementById('spnOutput');
+	let input = document.getElementById('tbxInput').value;
+	if (!isNaN(input) && parseInt(Number(input)) == input && !isNaN(parseInt(input, 10))) {
+		if (input < 1 || input > 9998) {
+			spnOutput.innerHTML = 'Input must be between 1 and 9998.';
+		} else if (input == 1111 || input == 2222 || input == 3333 || input == 4444 || input == 5555 || input == 6666 || input == 7777 || input == 8888) {
+			spnOutput.innerHTML = 'Input cannot be all repeating digits.';
+		} else {
+			while (input.length < 4) {
+				input = '0'+input;
+			}
+			spnOutput.innerHTML = 'Input = '+input+'<br />';
+			let iterations = 0;
+			while (input != 6174 && iterations < 8) {
+				let ascending = input.toString().split('').sort().join("");
+				let descending = input.toString().split('').sort(function(a, b){return b-a}).join("");
+				input = (descending - ascending).toString();
+				while (input.length < 4) {
+					input = '0'+input;
+				}
+				spnOutput.innerHTML += descending+' - '+ascending+' = '+input+'<br />';
+				iterations += 1;
+			}
+		}
+	} else {
+		spnOutput.innerHTML = 'Invalid input!';
+	}
+}
+</script>
+</body>
+</html>

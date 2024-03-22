@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <title>Deck of Cards</title>
+    </head>
+	<style>
+		div {
+			font-family: sans-serif;
+			font-size: 14pt;
+		}
+	</style>
+    <body>
+        <div style="text-align:center;">
+			<input type="button" value="Jokers" onclick="javascript:return toggleJokes();" />
+			<input type="button" value="Shuffle" onclick="javascript:return shuffleDeck();" />
+			<input type="button" value="Clear" onclick="javascript:return clearShown();" /><br />
+			<br />
+			Jokers: <span id="spnJokers" style="padding-right:25px;"></span>
+			Cards Remaining: <span id="spnCardsRemaining"></span><br />
+			<br />
+			<input type="button" value="Draw A Card" style="font-size:24;" onclick="javascript:return drawCard();" /><br />
+			<br />
+			<div id="drawn"></div>
+        </div>
+        <script language="Javascript">
+			/*
+				Simple Deck of Cards
+				Version 1.0
+				Author: Jared Pellegrini
+				
+				Changelog:
+				2024-03-21 v1.0
+			*/
+			
+			const MAX_CARDS_TO_SHOW = 12;
+			const suits = ["&clubs;", "&diams;", "&hearts;", "&spades;"];
+			
+			var allowJokers = true;
+			var cardsToShow = 0;
+			var deck = [];
+			var drawn = [];
+			
+			function shuffleDeck() {
+				cardsToShow = 0
+				deck = [];
+				drawn = [];
+				for (let i = 0; i < 4; i++) {
+					for (let j = 2; j <= 10; j++) {
+						deck.push(j.toString() + suits[i]);
+					}
+					deck.push('J' + suits[i]);
+					deck.push('Q' + suits[i]);
+					deck.push('K' + suits[i]);
+					deck.push('A' + suits[i]);
+				}
+				// add the two jokers if allowed
+				if (allowJokers) {
+					deck.push("Joker-RED");
+					deck.push("Joker-BLACK");
+				}
+				return displayDeck();
+			}
+			
+			function displayDeck() {
+				
+				if (deck.length > 0) {
+					document.getElementById('spnCardsRemaining').innerHTML = '<span style="color:green;">' + deck.length.toString() + '</span>';
+				} else {
+					document.getElementById('spnCardsRemaining').innerHTML = '<span style="color:red;">0</span>';
+				}
+				
+				if (allowJokers) {
+					document.getElementById('spnJokers').innerHTML = 'ON';
+				} else {
+					document.getElementById('spnJokers').innerHTML = 'OFF';
+				}
+				
+				document.getElementById('drawn').innerHTML = '';
+				if (cardsToShow > 0 && cardsToShow <= drawn.length) {
+					for (let i = 1; i <= cardsToShow; i++) {
+						document.getElementById('drawn').innerHTML += displayCard(drawn[drawn.length - i]) + '<br />';
+					}
+				}
+				
+				return false;
+			}
+			
+			function drawCard() {
+				if (deck.length > 0) {
+					// generate a random index, pull that card from the deck and add it to the drawn pile
+					let cardIndex = Math.floor(Math.random() * deck.length);
+					drawn.push(deck[cardIndex]);
+					deck.splice(cardIndex, 1);
+					if (cardsToShow < MAX_CARDS_TO_SHOW) { cardsToShow++; }
+					return displayDeck();
+				}
+				return false;
+			}
+			
+			function displayCard(thisCard) {
+				if (thisCard == 'Joker-RED') {
+					return '<span style="color:white; background-color:red;">JOKER</span>'
+				} else if (thisCard == 'Joker-BLACK') {
+					return '<span style="color:white; background-color:black;">JOKER</span>'
+				} else if (thisCard.includes('&diams;') || thisCard.includes('&hearts;')) {
+					return '<span style="color:red;">' + thisCard + '</span>'
+				} else {
+					return thisCard;
+				}
+			}
+			
+			function clearShown() {
+				cardsToShow = 0;
+				return displayDeck();
+			}
+			
+			function toggleJokes() {
+				allowJokers = !allowJokers;
+				return shuffleDeck();
+			}
+			
+			shuffleDeck();
+        </script>
+    </body>
+</html>
+			

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.new_indicator {
+	background-color:#FFFF00 !important;
+}
+
+.new_fadeout {
+    background-color: transparent;
+    animation-name: highlight-tab;
+    animation-duration: 0.5s;
+}
+
+@keyframes highlight-tab {
+    0%   {background-color: #FFFF00; }
+    100% {background-color: transparent; }
+}
+</style>
+</head>
+<body>
+
+<div style="width:100px; height:100px; border:1px solid black;" id='divTest'></div>
+<br />
+<button onclick="newHighlight()">New Highlight</button>
+<br /><br />
+Duration: <input type="text" id="txtDuration" style="width:40px;" value="5" />
+<br /><br />
+Timer: <input type="text" id="txtTimer" style="width:40px;" />
+
+<script language='javascript'>
+var highlightTimeout = null;
+var varTimerInterval = null;
+var tbxDuration = document.getElementById('txtDuration');
+var monitoringTab = document.getElementById('divTest');
+
+function newHighlight() {
+  restartTimer();
+  if (monitoringTab.classList.contains('new_indicator')) {
+	clearTimeout(highlightTimeout);
+	highlightTimeout = null;
+	console.log('cleared timeout: '+highlightTimeout);
+  } else {
+    monitoringTab.classList.remove('new_fadeout');
+    monitoringTab.classList.add('new_indicator');
+  }
+  let duration = tbxDuration.value;
+  highlightTimeout = setTimeout(fadeOut, duration*1000);
+  console.log('set timeout: '+highlightTimeout);
+}
+
+function fadeOut() {
+  monitoringTab.classList.remove('new_indicator');
+  monitoringTab.classList.add('new_fadeout');
+  highlightTimeout = null;
+  console.log('finish fadeout: '+highlightTimeout);
+}
+
+
+function restartTimer() {
+  clearInterval(varTimerInterval);
+  document.getElementById('txtTimer').value = "0";
+  varTimerInterval = setInterval(incrementTimer, 1000);
+}
+
+function incrementTimer() {
+  var myVal = parseInt(document.getElementById('txtTimer').value);
+  if (myVal < tbxDuration.value) {
+  	myVal = myVal + 1;
+  }
+  document.getElementById('txtTimer').value = myVal;
+}
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+ <HEAD>
+  <TITLE> Clouds! </TITLE>
+ </HEAD>
+
+ <BODY style="background:#bbbbff;">
+  <div style="width:100%; height:100%; overflow:hidden;">
+  <img style="position:absolute; left:0; top:0; z-index:2;" id="imgCloud1" src="cloud.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:2;" id="imgCloud2" src="cloud.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:2;" id="imgCloud3" src="cloud.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:2;" id="imgCloud4" src="cloud.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:2;" id="imgCloud5" src="cloud.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:2;" id="imgCloud6" src="cloud.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:2;" id="imgCloud7" src="cloud.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:2;" id="imgCloud8" src="cloud.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:2;" id="imgCloud9" src="cloud.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:1; display:none;" id="imgSun" src="sun.gif" />
+  <img style="position:absolute; left:0; top:0; z-index:1; display:none;" id="imgMoon" src="moon.gif" />
+  </div>
+
+  <script type="text/javascript">
+  var maxRG = 187;
+  var maxB = 255;
+
+  var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight; 
+
+	function startMoveElement(element) {
+		var myElement = document.getElementById(element);
+		myElement.style.left = (Math.random()*(x - myElement.offsetWidth));
+		myElement.style.top = (Math.random()*(y - myElement.offsetHeight));
+		var interval = Math.random()*75 + 25;
+		moveElement(element, interval);
+	}
+	
+	function moveElement(element, interval) {
+		var myElement = document.getElementById(element);
+		if (parseInt(myElement.style.left.replace('px','')) < x)
+		{
+			myElement.style.left = parseInt(myElement.style.left.replace('px','')) + 1;
+		} else {
+			myElement.style.top = (Math.random()*(y - myElement.offsetHeight));
+			myElement.style.left = 0 - myElement.offsetWidth;
+		}
+		setTimeout("moveElement('"+element+"',"+interval+")",interval);
+	}
+
+	function startMoveSun(interval) {
+		var mySun = document.getElementById('imgSun');
+		mySun.style.display = '';
+		mySun.style.left = (x - mySun.offsetWidth)/2;
+		mySun.style.top = (y);
+		moveSun(interval);
+	}
+
+	function moveSun(interval) {
+		var mySun = document.getElementById('imgSun');
+		var Ycoord = parseInt(mySun.style.top.replace('px','')) - 1;
+		if (Ycoord >= 0) {
+			var hexRGString = parseInt(maxRG - ((Ycoord/y) * maxRG)).toString(16);
+			if(hexRGString.length == 1) {
+				hexRGString = '0'+hexRGString;
+			}
+			var hexBString = parseInt(maxB - ((Ycoord/y) * maxB)).toString(16);
+			if(hexBString.length == 1) {
+				hexBString = '0'+hexBString;
+			}
+			document.body.style.background = '#'+hexRGString+hexRGString+hexBString;
+		}
+		if (Ycoord >= 0 - mySun.offsetHeight) {
+			mySun.style.top = Ycoord;
+			setTimeout("moveSun("+interval+")",interval);
+		} else {
+			mySun.style.display = 'none';
+			startMoveMoon(interval);
+		}
+	}
+
+	function startMoveMoon(interval) {
+		var myMoon = document.getElementById('imgMoon');
+		myMoon.style.display = '';
+		myMoon.style.left = (x - myMoon.offsetWidth)/2;
+		myMoon.style.top = (y);
+		moveMoon(interval);
+	}
+
+	function moveMoon(interval) {
+		var myMoon = document.getElementById('imgMoon');
+		var Ycoord = parseInt(myMoon.style.top.replace('px','')) - 1;
+		if (Ycoord >= 0) {
+			var hexRGString = parseInt((Ycoord/y) * maxRG).toString(16);
+			if(hexRGString.length == 1) {
+				hexRGString = '0'+hexRGString;
+			}
+			var hexBString = parseInt((Ycoord/y) * maxB).toString(16);
+			if(hexBString.length == 1) {
+				hexBString = '0'+hexBString;
+			}
+			document.body.style.background = '#'+hexRGString+hexRGString+hexBString;
+		}
+		if (Ycoord >= 0 - myMoon.offsetHeight) {
+			myMoon.style.top = Ycoord;
+			setTimeout("moveMoon("+interval+")",interval);
+		} else {
+			myMoon.style.display = 'none';
+			startMoveSun(interval);
+		}
+	}
+
+	startMoveElement('imgCloud1');
+	startMoveElement('imgCloud2');
+	startMoveElement('imgCloud3');
+	startMoveElement('imgCloud4');
+	startMoveElement('imgCloud5');
+	startMoveElement('imgCloud6');
+	startMoveElement('imgCloud7');
+	startMoveElement('imgCloud8');
+	startMoveElement('imgCloud9');
+	startMoveSun(50);
+
+  </script>
+ </BODY>
+</HTML>
