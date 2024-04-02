@@ -1,0 +1,75 @@
+<html>
+<head></head>
+<body>
+1 here's some text above the div<br />
+2 here's some text above the div<br />
+3 here's some text above the div<br />
+4 here's some text above the div<br />
+5 here's some text above the div<br />
+<table style="width:100%; border-top:1px solid black;">
+	<tr>
+		<td>
+			<input type="hidden" id="hdnDivHeight" runat="server" value="120" />
+			<div id="divTop" style="width:100%; overflow:auto;">
+				1 here's some text in the div<br />
+				2 here's some text in the div<br />
+				3 here's some text in the div<br />
+				4 here's some text in the div<br />
+				5 here's some text in the div<br />
+				6 here's some text in the div<br />
+				7 here's some text in the div<br />
+				8 here's some text in the div<br />
+				9 here's some text in the div<br />
+				10 here's some text in the div<br />
+				11 here's some text in the div<br />
+				12 here's some text in the div<br />
+				13 here's some text in the div<br />
+				14 here's some text in the div<br />
+				15 here's some text in the div<br />
+				16 here's some text in the div<br />
+				17 here's some text in the div<br />
+				18 here's some text in the div<br />
+				19 here's some text in the div<br />
+				20 here's some text in the div<br />
+			</div>
+			<hr id="hrMover" style="width:100%; border-bottom:solid 2px black; cursor:ns-resize;" />
+		</td>
+	</tr>
+</table>
+1 here's some text below the div<br />
+2 here's some text below the div<br />
+3 here's some text below the div<br />
+4 here's some text below the div<br />
+5 here's some text below the div<br />
+
+<script language="JavaScript">
+	const hdnDivHeight = document.getElementById('hdnDivHeight');
+	const divTop = document.getElementById('divTop');
+	const hrMover = document.getElementById('hrMover');
+	let m_pos;
+
+	function AdjustLayout() {
+		divTop.style.height = hdnDivHeight.value + "px";
+	}
+
+	function resizeDiv(e) {
+		const dy = m_pos - e.y;
+		m_pos = e.y;
+		hdnDivHeight.value = (parseInt(getComputedStyle(divTop, '').height) - dy);
+		AdjustLayout();
+	}
+	hrMover.addEventListener("mousedown", function (e) {
+		m_pos = e.y;
+		document.addEventListener("mousemove", resizeDiv, false);
+	}, false);
+
+	document.addEventListener("mouseup", function () {
+		document.removeEventListener("mousemove", resizeDiv, false);
+	}, false);
+
+	AdjustLayout();
+
+</script>
+
+</body>
+</html>
